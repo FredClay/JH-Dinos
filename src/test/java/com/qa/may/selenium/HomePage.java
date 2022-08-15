@@ -2,10 +2,11 @@ package com.qa.may.selenium;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
 
 public class HomePage {
 
@@ -41,6 +42,28 @@ public class HomePage {
         WebElement secondDino = myWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#output > div:nth-child(2)")));
         String dinoName = secondDino.findElement(By.cssSelector("div > div > h2")).getText();
         return dinoName;
+    }
+
+    public void fillInputs(String name, Integer age, String species) {
+        nameInput.sendKeys(name);
+        ageInput.sendKeys(age.toString());
+        speciesInput.sendKeys(species);
+    }
+
+    public void resetInputFields() {
+        resetButton.click();
+    }
+
+    public boolean checkInputsAreBlank() {
+        List<WebElement> results = this.dinoForm.findElements(By.xpath("input"));
+        int countOfElements = results.size();
+        int countOfBlanks = 0;
+        for (WebElement elem : results) {
+            if (elem.getAttribute("value").isBlank()) {
+                countOfBlanks++;
+            }
+        }
+        return countOfBlanks == countOfElements;
     }
 
 }

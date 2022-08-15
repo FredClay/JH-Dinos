@@ -5,14 +5,9 @@ import java.time.Duration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -22,6 +17,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Sql(scripts = { "classpath:dino-schema.sql",
@@ -57,6 +53,19 @@ public class SeleniumTesting {
 		String result = homePage.getSecondDino(this.wait);
 
 		assertEquals(expectedName, result);
+
+	}
+
+	@Test
+	void clearTest() {
+		this.driver.get("http://localhost:" + port + "/");
+
+		HomePage homePage = PageFactory.initElements(this.driver, HomePage.class);
+
+		homePage.fillInputs("Bruno", 31, "Brontosaurus");
+		homePage.resetInputFields();
+
+		assertTrue(homePage.checkInputsAreBlank());
 
 	}
 
